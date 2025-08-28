@@ -1,0 +1,23 @@
+{
+  "name": "thaya-cron",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "type": "module",
+  "scripts": {
+    "start": "node dist/index.js",
+    "dev": "npx tsx src/index.ts",
+    "build": "tsc"
+  },
+  "author": "Valmir",
+  "license": "ISC",
+  "description": "A cron job scheduler using node-cron.",
+  "devDependencies": {
+    "@types/node": "^24.3.0",
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.2"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.1",
+    "node-cron": "^4.2.1"
+  }
+}
