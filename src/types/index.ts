@@ -5,8 +5,8 @@ export type User = {
   email: string;
   phoneNumber: string;
   birthdate: string;
-  profilePicFileName: string;
   nickname: string;
+  telegramChatId?: number;
 };
 
 export type CalendarOccurrence = {
@@ -15,3 +15,7 @@ export type CalendarOccurrence = {
 };
 
 export type AbbreviatedMonth = (typeof MONTHS_ABBREVIATION)[number];
+
+export type GenericListReturn<T> = {
+  items: T[];
+};

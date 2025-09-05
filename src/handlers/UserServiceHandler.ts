@@ -1,48 +1,47 @@
-import axios from "axios";
+import httpCallers from "../services/index.js";
 import type {
   AbbreviatedMonth,
   CalendarOccurrence,
+  GenericListReturn,
   User,
 } from "../types/index.js";
-import { Agent } from "https";
 
 export default class UserServiceHandler {
-  private readonly DEFAULT_AXIOS_CONFIG = {
-    httpsAgent: new Agent({ rejectUnauthorized: false }),
-  };
-
-  constructor(private serviceUrl: string) {}
+  constructor(private readonly serviceUrl: string) {}
 
   async listAllUsers(): Promise<User[]> {
     console.log("Fetching all users");
 
-    const { data } = await axios.get(`${this.serviceUrl}/list`, {
-      ...this.DEFAULT_AXIOS_CONFIG,
-    });
+    const { data }: { data: GenericListReturn<User> } = await httpCallers.get(
+      `${this.serviceUrl}/list`
+    );
 
-    console.log(`Fetched ${data.length} users`);
+    console.log(`Fetched ${data.items.length} users`);
 
-    return data as User[];
+    return data.items;
   }
 
   async fetchCalendar(
     userEmail: string,
     month: AbbreviatedMonth,
     year: number
-  ): Promise<{ items: CalendarOccurrence[] }> {
+  ): Promise<CalendarOccurrence[]> {
     const url = `${this.serviceUrl}/calendar?month=${month}&year=${year}`;
 
     console.log(`Fetching calendar data from "${url}" for user "${userEmail}"`);
 
-    const { data } = await axios.get(url, {
-      ...this.DEFAULT_AXIOS_CONFIG,
-      headers: { "x-user-email": userEmail },
-    });
+    const { data }: { data: GenericListReturn<CalendarOccurrence> } =
+      await httpCallers.get(url, {
+        headers: { "x-user-email": userEmail },
+      });
 
     console.log(
       `Fetched calendar data for "${userEmail}", found ${data.items.length} items`
     );
 
-    return data as { items: CalendarOccurrence[] };
+    return data.items.map((item) => ({
+      ...item,
+      datetime: new Date(item.datetime),
+    }));
   }
 }
