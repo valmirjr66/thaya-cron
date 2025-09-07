@@ -1,4 +1,4 @@
-import axios from "axios";
+import httpCallers from "../services/index.js";
 
 export default class TelegramHandler {
   constructor(
@@ -15,7 +15,7 @@ export default class TelegramHandler {
 
     if (this.environment === "prod") {
       try {
-        const response = await axios.post(
+        const response = await httpCallers.post(
           `https://api.telegram.org/bot${this.token}/sendMessage`,
           {
             chat_id: chatId,
